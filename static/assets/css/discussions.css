@@ -1,0 +1,111 @@
+.discussions-view .projects-heading {
+    position: relative
+}
+
+.discussions-view .projects-heading .actions {
+    position: absolute;
+    right: 0;
+    top: -6px
+}
+
+.discussions-module .title {
+    position: relative;
+    margin-top: 0;
+    margin-bottom: 30px
+}
+
+.discussions-module .rss-feed {
+    position: absolute;
+    right: 0;
+    font-size: 13px;
+    color: #f8a13f
+}
+
+.discussions-module .table th {
+    text-align: center;
+    color: #a2a6af
+}
+
+.discussions-module .table th.topic {
+    text-align: left
+}
+
+.discussions-module .table td {
+    text-align: center;
+    vertical-align: middle
+}
+
+.discussions-module .table td .note {
+    color: #c3c3c3;
+    font-size: 12px;
+    font-weight: 400
+}
+
+.discussions-module .table td.topic {
+    text-align: left
+}
+
+.discussions-module .table td.topic .fa {
+    color: #f2b542;
+    display: inline-block;
+    margin-right: 10px
+}
+
+.discussions-module .table td.topic a {
+    color: #616670
+}
+
+.discussions-module .table td.topic a:hover {
+    color: #40babd
+}
+
+.theme-2 .discussions-module .table td.topic a:hover {
+    color: #6dbd63
+}
+
+.theme-3 .discussions-module .table td.topic a:hover {
+    color: #497cb1
+}
+
+.theme-4 .discussions-module .table td.topic a:hover {
+    color: #ec6952
+}
+
+.discussions-module .table td.posts {
+    font-weight: 700
+}
+
+.discussions-module .table td.posts .label {
+    font-size: inherit
+}
+
+.discussions-module .table .poster {
+    text-align: center
+}
+
+.discussions-module .table .poster .profile {
+    width: 30px;
+    height: 30px
+}
+
+.discussions-module .table td.views {
+    color: #616670;
+    font-weight: 700
+}
+
+.discussions-module .table td.updated {
+    color: #a2a6af;
+    font-size: 12px
+}
+
+.discussions-module .table td.updated a {
+    color: #a2a6af
+}
+
+@media (max-width: 767px) {
+    .discussions-module .rss-feed {
+        position:static;
+        display: inline-block;
+        margin-top: 15px
+    }
+}

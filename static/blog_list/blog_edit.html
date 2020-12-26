@@ -1,0 +1,336 @@
+<html lang="zh"><head>
+    <title>新增博客</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="/static/editor.md-master/examples/css/style.css" />
+    <link rel="stylesheet" href="/static/editor.md-master/css/editormd.css" />
+    <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
+
+    <link rel="shortcut icon" href="/static/assets/images/favicon.ico">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/static/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/assets/css/metisMenu.css">
+   <!-- <link rel="stylesheet" href="/static/assets/css/font-awesome.css">-->
+    <link rel="stylesheet" href="/static/assets/css/elegant-icons.css">
+    <link rel="stylesheet" href="/static/assets/css/pe-7-icons.css">
+    <link rel="stylesheet" href="/static/assets/css/pe-7-icons-helper.css">
+    <link rel="stylesheet" href="/static/assets/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
+    <link rel="stylesheet" href="/static/assets/css/tether-shepherd.css">
+    <link rel="stylesheet" href="/static/assets/css/jstree-default.css">
+    <link rel="stylesheet" href="/static/assets/css/styles2.css">
+    <link rel="stylesheet" href="/static/common/toastr/toastr.min.css"  />
+    <link rel="stylesheet" href="/static/assets/plugins/prism/prism.css"  />
+    <link rel="stylesheet" href="/static/assets/plugins/elegant_font/css/style.css"  />
+    <link rel="stylesheet" href="/static/assets/css/styles.css"  />
+    <style>
+        .content-wrapper {
+            margin-left: 0px;
+            padding: 0px 80px;
+
+        }
+        .alert-promo .btn {
+            margin: 5px 10px;
+        }
+    </style>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class=" pace-done" style="background: #f9f9fb;"><div class="pace  pace-inactive"><div class="pace-progress" data-progress-text="100%" data-progress="99" style="transform: translate3d(100%, 0px, 0px);">
+    <div class="pace-progress-inner"></div>
+</div>
+    <div class="pace-activity"></div></div>
+<div id="top-alert" class="alert alert-promo alert-dismissible fade in text-center" role="alert" style="display:block;background-color: #494d55;">
+   <!-- <span id="top-alert-close" aria-hidden="true" class="icon icon_close close"></span>-->
+    <a class="btn btn-success btn-sm margin-left-sm" href="/index">首 页</a> <strong>欢应</strong> 访问小Y博客  <a class="btn btn-success btn-sm margin-left-sm" href="/index">登 录</a>
+</div>
+<!--<header class="header"  style="height: 0px; ">
+
+</header>-->
+
+
+<div id="content-wrapper" class="content-wrapper view">
+    <div class="container-fluid">
+       <!-- <h2 class="view-title">Markdown编辑器</h2>-->
+        <div class="row">
+            <div class="module-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                <section class="module">
+                    <div class="module-inner">
+                        <div class="module-heading">
+                           <!-- <h3 class="module-title">编辑博客</h3>-->
+                            <ul class="actions list-inline">
+                                <li><a class="collapse-module" data-toggle="collapse"  data-target="#content-1" aria-expanded="true" aria-controls="content-1"><span aria-hidden="false" class="icon arrow_carrot-up"></span></a></li>
+                                <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
+                            </ul>
+
+                        </div>
+
+                        <div class="module-content collapse in" id="content-1">
+                            <div class="module-content-inner no-padding-bottom">
+                                <div id="doc-header" class="doc-header text-center">
+                                    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i>markdown编辑器</h1>
+                                    <div class="meta" id="update_time"><i class="far fa-clock"></i></div>
+                                </div>
+                            <div class="module-content-inner no-padding-bottom">
+                                    <div class="form-group">
+                                        <input name="title" id="title" type="text" class="form-control" placeholder="欢迎使用markdown编辑器">
+                                    </div>
+                                <div class="form-group">
+                               <a  class="btn btn-primary blog_module" value="" module_flag="rust">rust模块</a>
+                               <a  class="btn btn-primary blog_module" value="" module_flag="python">python模块</a>
+                               <a  class="btn btn-primary blog_module" value="" module_flag="java">java模块</a>
+                               <a  class="btn btn-primary blog_module" value="" module_flag="liunx">liunx模块</a>
+                               <a  class="btn btn-primary blog_module" value="" module_flag="c">c&c++模块</a>
+                               <a  class="btn btn-primary blog_module" value="" module_flag="other">其他模块</a>
+                            </div>
+                               <!-- <a href="#" class="btn btn-green">Green Button</a>-->
+                                <!--<ul class="list list-unstyled">
+                                    <li><a href="#" class="btn btn-primary">Primary Button</a></li>
+                                    <li><a href="#" class="btn btn-green">Green Button</a></li>
+                                    <li><a href="#" class="btn btn-blue">Blue Button</a></li>
+                                    <li><a href="#" class="btn btn-orange">Orange Button</a></li>
+                                    <li><a href="#" class="btn btn-red">Red Button</a></li>
+                                </ul>-->
+                                  <!--  <textarea name="content"  id ="editor-zh"  rows="10"></textarea>-->
+                                <div id="test-editormd"></div>
+                                 <!--   <label class="checkbox">
+                                        <input name="publish"  class="btn btn-primary"  type="checkbox"> 是否公开
+                                    </label>
+                                    <hr/>-->
+                                    <button type="submit" class="btn btn-primary" id="submit">提交</button>
+                                    <a class="btn btn-default" href="http://www.codingdrama.com/bootstrap-markdown/" target="_blank">了解更多</a>
+                                <!--</form>-->
+
+                            </div>
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+                </section>
+
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+
+</div>
+
+<input hidden="hidden" id="table_id">
+<!--<div class="col-md-6 col-12">
+    <h6>Basic Buttons</h6>
+    <ul class="list list-unstyled">
+        <li><a href="#" class="btn btn-primary">Primary Button</a></li>
+        <li><a href="#" class="btn btn-green">Green Button</a></li>
+        <li><a href="#" class="btn btn-blue">Blue Button</a></li>
+        <li><a href="#" class="btn btn-orange">Orange Button</a></li>
+        <li><a href="#" class="btn btn-red">Red Button</a></li>
+    </ul>
+</div>-->
+<script src="/static/editor.md-master/examples/js/jquery.min.js"></script>
+<script src="/static/editor.md-master/editormd.js"></script>
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.js"></script>
+<script src="/static/assets/js/metisMenu.js"></script>
+<script src="/static/assets/js/imagesloaded.js"></script>
+<script src="/static/assets/js/masonry.js"></script>
+<script src="/static/assets/js/pace.js"></script>
+<script src="/static/assets/plugins/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+<script type="text/javascript" src="/static/assets/plugins/bootstrap-markdown/locale/bootstrap-markdown.zh.js"></script>
+<script src="/static/assets/js/markdown-js.js"></script>
+<script src="/static/assets/js/to-markdown.js"></script>
+<script src="/static/assets/plugins/bootstrap-markdown/js/jquery.hotkeys.js"></script>
+
+<script src="/static/assets/js/tether.js"></script>
+<script src="/static/assets/js/tether-shepherd.js"></script>
+<script src="/static/assets/js/main.js"></script>
+<script src="/static/assets/js/tour.js"></script>
+<script src="/static/assets/js/demo.js"></script>
+<script type="text/javascript" src="/static/index/js/baseURL.js"></script>
+<script type="text/javascript" src="/static/blog_list/js/blog_edit.js"></script>
+<!--提示框组件-->
+<script type="text/javascript" src="/static/common/toastr/toastr.js"></script>
+
+<script type="text/javascript">
+ /*   var testEditor;
+
+    $(function() {
+
+        $.get('/test_md', function(md){
+            testEditor = editormd("test-editormd", {
+                width: "100%",
+                height: 900,
+                path : '/static/editor.md-master/lib/',
+                theme :/!* "dark"*!/"default",
+                previewTheme : /!*"dark"*!/"default",
+                editorTheme : /!*"pastel-on-dark"*!/"default",
+                markdown : md,
+                codeFold : true,
+                //syncScrolling : false,
+                saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
+                searchReplace : true,
+                //watch : false,                // 关闭实时预览
+                htmlDecode : "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
+                //toolbar  : false,             //关闭工具栏
+                //previewCodeHighlight : false, // 关闭预览 HTML 的代码块高亮，默认开启
+                emoji : true,
+                taskList : true,
+                tocm            : true,         // Using [TOCM]
+                tex : true,                   // 开启科学公式TeX语言支持，默认关闭
+                flowChart : true,             // 开启流程图支持，默认关闭
+                sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
+                //dialogLockScreen : false,   // 设置弹出层对话框不锁屏，全局通用，默认为true
+                //dialogShowMask : false,     // 设置弹出层对话框显示透明遮罩层，全局通用，默认为true
+                //dialogDraggable : false,    // 设置弹出层对话框不可拖动，全局通用，默认为true
+                //dialogMaskOpacity : 0.4,    // 设置透明遮罩层的透明度，全局通用，默认值为0.1
+                //dialogMaskBgColor : "#000", // 设置透明遮罩层的背景颜色，全局通用，默认为#fff
+                imageUpload : true,
+                imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                imageUploadURL : "./php/upload.php",
+                onload : function() {
+                    console.log('onload', this);
+                    //this.fullscreen();
+                    //this.unwatch();
+                    //this.watch().fullscreen();
+
+                    //this.setMarkdown("#PHP");
+                    //this.width("100%");
+                    //this.height(480);
+                    //this.resize("100%", 640);
+                }
+            });
+        });
+
+        $("#goto-line-btn").bind("click", function(){
+            testEditor.gotoLine(90);
+        });
+
+        $("#show-btn").bind('click', function(){
+            testEditor.show();
+        });
+
+        $("#hide-btn").bind('click', function(){
+            testEditor.hide();
+        });
+
+        $("#get-md-btn").bind('click', function(){
+            alert(testEditor.getMarkdown());
+        });
+
+        $("#get-html-btn").bind('click', function() {
+            alert(testEditor.getHTML());
+        });
+
+        $("#watch-btn").bind('click', function() {
+            testEditor.watch();
+        });
+
+        $("#unwatch-btn").bind('click', function() {
+            testEditor.unwatch();
+        });
+
+        $("#preview-btn").bind('click', function() {
+            testEditor.previewing();
+        });
+
+        $("#fullscreen-btn").bind('click', function() {
+            testEditor.fullscreen();
+        });
+
+        $("#show-toolbar-btn").bind('click', function() {
+            testEditor.showToolbar();
+        });
+
+        $("#close-toolbar-btn").bind('click', function() {
+            testEditor.hideToolbar();
+        });
+
+        $("#toc-menu-btn").click(function(){
+            testEditor.config({
+                tocDropdown   : true,
+                tocTitle      : "目录 Table of Contents",
+            });
+        });
+
+        $("#toc-default-btn").click(function() {
+            testEditor.config("tocDropdown", false);
+        });
+    });*/
+</script>
+<!--<footer id="footer" class="site-footer" style="display:block">
+    <div class="copyright">Copyright © 2018 - <a href="#">Bootstrap Admin Theme</a></div>
+</footer>-->
+
+
+
+
+</body>
+</html>
+<!--
+
+<script type="text/javascript" >
+
+    $(document).ready(function() {
+
+        //  $("#some-textarea").markdown({autofocus:false,savable:false})
+        alert(33);
+
+        $("#mktextarea").markdown({
+            savable:false,
+            autofocus:false,
+            onShow: function(e){
+                alert("Showing "
+                    +e.$textarea.prop("tagName").toLowerCase()
+                    +"#"
+                    +e.$textarea.attr("id")
+                    +" as Markdown Editor...")
+            },
+            onPreview: function(e) {
+                var previewContent
+
+                if (e.isDirty()) {
+                    var originalContent = e.getContent()
+
+                    previewContent = "Prepended text here..."
+                        + "\n"
+                        + originalContent
+                        + "\n"
+                        +"Apended text here..."
+                } else {
+                    previewContent = "Default content"
+                }
+
+                return previewContent
+            },
+            onSave: function(e) {
+                alert("Saving '"+e.getContent()+"'...")
+            },
+            onChange: function(e){
+                console.log("Changed!")
+            },
+            onFocus: function(e) {
+                alert("Focus triggered!")
+            },
+            onBlur: function(e) {
+                alert("Blur triggered!")
+            }
+        })
+
+    });
+</script>-->
