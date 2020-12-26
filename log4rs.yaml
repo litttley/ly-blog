@@ -1,0 +1,23 @@
+# log4rs.yaml
+# 检查配置文件变动的时间间隔
+refresh_rate: 30 seconds
+# appender 负责将日志收集到控制台或文件, 可配置多个
+appenders:
+  stdout:
+    kind: console #日志打印发往控制台 file 和 rolling_file 都是将日志收集到文件中, 但对于长时间运行的程序, rolling_file 更合适, 因为它可以配置 log rotate, 避免 log 文件占用太多硬盘空间.
+    encoder:
+      pattern: "[Console] {d(%Y-%m-%d %H:%M:%S)} - {l} -{t}:{L}行 - {m}:{n}" # d:日期 l:log级别 t模块名称 m:日志信息 n:换行符，相当于\n
+  file:
+    kind: file
+    path: "log/log.log" #log文件路径
+    encoder:
+      append: true # 追加模式, 即每次在已有文件末尾添加日志, 默认为 true
+      kind: pattern
+      # log 信息模式
+      pattern: "[Console] {d(%Y-%m-%d %H:%M:%S)} - {l} -{t}:{L}行 - {m}:{n}" #pattern纯文本格式
+# 对全局 log 进行配置
+root:
+  level: info
+  appenders:
+    - stdout
+    - file
