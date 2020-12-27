@@ -1,14 +1,14 @@
 use actix_files as fs;
 use actix_identity::Identity;
-use actix_web::{get, HttpRequest, HttpResponse, Result, web::{self, /*Data,*/ Path}};
+use actix_web::{get, HttpRequest, HttpResponse, Result, web::{/*self,*/ /*Data,*/ Path}};
 use actix_web::http::StatusCode;
 use log::info;
 
 use crate::utils::claims;
 
-pub fn init(cfg: &mut web::ServiceConfig) {
+/*pub fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(blog_login);
-}
+}*/
 
 // 网站图标
 #[get("/favicon")]
