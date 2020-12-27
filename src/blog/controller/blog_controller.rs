@@ -1,7 +1,7 @@
 //use json::JsonValue;
 use actix_identity::Identity;
 use actix_multipart::Multipart;
-use actix_web::{Error, get, HttpRequest, HttpResponse, Responder, Result, web::{self, /*Data,*/ Json, Path}};
+use actix_web::{Error, /*get,*/ HttpRequest, HttpResponse, Responder, Result, web::{self, /*Data,*/ Json, Path}};
 use async_std::prelude::*;
 use futures::TryStreamExt;
 //use actix_web::http::{StatusCode};
@@ -34,11 +34,11 @@ pub async fn blog_signup(signup_user: Json<SignupUser>, pool: ConnectionPool) ->
     let auth_handler = AuthHandler(pool);
     match auth_handler.user_add(msg).await {
         Ok(res) => {
-            info!(" res: {}", res);
+            info!("auth_handler.user_add ok  响应数据====》 {}", res);
             ResultMsg::new().msg("ok").data(res)
         }
         Err(e) => {
-            error!(" error: {:?}", e);
+            error!(" auth_handler.user_add error: {:?}", e);
             ResultMsg::new().code(400).msg(e.to_string())
         }
     }
@@ -51,35 +51,30 @@ pub async fn blog_signin(id: Identity, signin_user: Json<SigninUser>, pool: Conn
         password: signin_user.password.clone(),
 
     };
-
-
-    // use chrono::{DateTime, Duration, Utc};
-    // use jsonwebtoken::{encode, EncodingKey, Header};
     let auth_handler = AuthHandler(pool);
     match auth_handler.user_query(&form.username).await {
         Ok(user) => {
-            info!("ok: {:?}", user);
+            info!("当前登录用户====> {:?}", user);
             let token = UserToken {
                 username: user.clone().user_name.unwrap()
             };
 
 
             let token = claims::create_token(&token);
-
             match token {
                 Ok(t) => {
-                    println!("token:{}", t);
+                    println!("创建token====> {}", t);
                     id.remember(t.to_owned());
                     ResultMsg::new().msg("ok").data(user)
                 }
                 Err(e) => {
-                    error!(" error: {:?}", e);
+                    error!("创建token失败====> {:?}", e);
                     ResultMsg::new().code(400).msg(e.to_string())
                 }
             }
         }
         Err(e) => {
-            error!(" error: {:?}", e);
+            error!("用户查询失败!====> {:?}", e);
             ResultMsg::new().code(400).msg(e.to_string())
         }
     }
@@ -97,24 +92,23 @@ pub async fn blog_save(id: Identity, blog_item: Json<BlogItem>, pool: Connection
         blog_moudle: blog_item.blog_moudle.clone(),
     };
 
-
     let mut login_user_name = String::from("");
     if let Some(token) = id.identity() {
-        info!("token{}", &token);
+        info!("当前登录用户token ====>{}", &token);
 
         match claims::decode_token(&token) {
             Ok(token_data) => {
-                info!("token_data");
+                info!("当前登录用户===={}", token_data);
                 login_user_name.push_str(token_data.trim())
             }
 
             Err(e) => {
-                info!("Unauthorized:{:?}", e);
+                info!("当前用户token解密失败 ====》 {:?}", e);
                 login_user_name.push_str("")
             }
         }
     } else {
-        info!("error{:?}", id.identity());
+        info!("identity error{:?}", id.identity());
     }
     if login_user_name.is_empty() {
         return ResultMsg::new().code(400).msg("当前用户未登录,请重新登录!");
@@ -124,11 +118,11 @@ pub async fn blog_save(id: Identity, blog_item: Json<BlogItem>, pool: Connection
     let blog_handler = BlogHandler(pool);
     match blog_handler.blog_save(data).await {
         Ok(res) => {
-            info!("ok: {:?}", res);
+            info!(" blog_handler.blog_save ok ====> {:?}", res);
             ResultMsg::new().msg("ok").data(res)
         }
         Err(e) => {
-            error!(" error: {:?}", e);
+            error!("blog_handler.blog_save error ====> {:?}", e);
             ResultMsg::new().code(400).msg(e.to_string())
         }
     }
@@ -137,10 +131,6 @@ pub async fn blog_save(id: Identity, blog_item: Json<BlogItem>, pool: Connection
 
 //博客列表
 pub async fn public_blog_list_content(id: Identity, blog_list_req: Json<BlogListReq>, pool: ConnectionPool) -> impl Responder {
-    // info! {"identity{:?}", id.identity()};
-
-
-
     if let Some(token) = id.identity() {
         info!("token{}", &token);
 
@@ -191,6 +181,7 @@ pub async fn get_edit_mkdown((item, pool): (Json<GetBlogMkDownReq>, ConnectionPo
             info!("ok: {:?}", t);
             ResultMsg::new().msg("ok").data(t)
         }
+
         Err(e) => {
             error!(" error: {:?}", e);
             ResultMsg::new().code(400).msg(e.to_string())
@@ -200,13 +191,11 @@ pub async fn get_edit_mkdown((item, pool): (Json<GetBlogMkDownReq>, ConnectionPo
 
 pub async fn get_blog_mkdown((info, item, _req): (Path<(String)>, Json<GetBlogMkDownReq>, HttpRequest), pool: ConnectionPool) -> impl Responder {
     let module_name = info.into_inner();
-    info!("module_name:{:?}", module_name);
+    info!("模块名称module_name ====> {:?}", module_name);
 
     if item.bid.is_empty() {
-        //return   ResultMsg::new().code(400).data(json!({"success": "false","content": ""}))
         return ResultMsg::new().code(400).msg("bid不能为空!");
     }
-
 
     let blog_handler = BlogHandler(pool);
 
@@ -215,6 +204,7 @@ pub async fn get_blog_mkdown((info, item, _req): (Path<(String)>, Json<GetBlogMk
             info!("ok: {:?}", t);
             ResultMsg::new().msg("ok").data(t)
         }
+
         Err(e) => {
             error!(" error: {:?}", e);
             ResultMsg::new().code(400).msg(e.to_string())
@@ -240,6 +230,7 @@ pub async fn blog_edit_save((blog_eidt_req, pool): (Json<BlogEidtReq>, Connectio
             info!("ok: {:?}", r);
             ResultMsg::new().msg(r).data(())
         }
+
         Err(e) => {
             error!(" error: {:?}", e);
             ResultMsg::new().code(400).msg(e.to_string())
@@ -255,11 +246,10 @@ pub async fn blog_delete((id, blog_delete_req, pool): (Identity, Json<BlogDelete
         info!("token{}", &token);
 
         match claims::decode_token(&token) {
-            Ok(token_data) =>
-                {
-                    info!("token_data");
-                    flag.push_str(token_data.trim())
-                }
+            Ok(token_data) => {
+                info!("token_data");
+                flag.push_str(token_data.trim())
+            }
 
             Err(e) => {
                 info!("Unauthorized:{:?}", e);

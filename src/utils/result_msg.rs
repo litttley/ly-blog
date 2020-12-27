@@ -45,10 +45,13 @@ impl<T: Serialize> ResultMsg<T> {
         self.data = Some(data);
         self
     }
+
+    //打印日志
     pub fn log_to_resp(&self, req: &HttpRequest) -> HttpResponse {
         self.log(req);
         self.to_resp()
     }
+
     pub fn log(&self, req: &HttpRequest) {
         info!(
             "{} \"{} {} {:?}\" {}",
@@ -59,6 +62,8 @@ impl<T: Serialize> ResultMsg<T> {
             self.code
         );
     }
+
+    //序列化成json字符串并响应
     pub fn to_resp(&self) -> HttpResponse {
         let resp = match serde_json::to_string(self) {
             Ok(json) => HttpResponse::Ok()
@@ -88,12 +93,13 @@ impl<T: Debug + Serialize> ResponseError for ResultMsg<T> {
     }
 }
 
-// Either and AsRef/Responder not in crate
+//实现
 pub enum ResultRt<L, R> {
     Ref(L),
     T(R),
 }
 
+// 实现Responder 转换成http response
 impl<T, R> Responder for ResultRt<R, ResultMsg<T>>
     where
         T: Serialize,
@@ -134,20 +140,20 @@ pub fn json_error_handler<E: std::fmt::Display + std::fmt::Debug + 'static>(
     req: &HttpRequest,
 ) -> error::Error {
     let detail = err.to_string();
-    let api = ResultMsg::new().data(()).code(400).msg(detail);
-    let response = api.log_to_resp(req);
+    let msg = ResultMsg::new().data(()).code(400).msg(detail);
+    let response = msg.log_to_resp(req);
 
     error::InternalError::from_response(err, response).into()
 }
 
-
+//404 异常
 pub async fn notfound(req: HttpRequest) -> Result<HttpResponse, Error> {
-    let api = ResultMsg::new()
+    let msg = ResultMsg::new()
         .data(())
         .code(404)
         .msg("route not found");
 
-    api.respond_to(&req).await
+    msg.respond_to(&req).await
 }
 
 

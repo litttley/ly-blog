@@ -1,5 +1,5 @@
-// Messages
-pub const MESSAGE_OK: &str = "ok";
+//常量
+/*pub const MESSAGE_OK: &str = "ok";
 pub const MESSAGE_CAN_NOT_FETCH_DATA: &str = "Can not fetch data";
 pub const MESSAGE_CAN_NOT_INSERT_DATA: &str = "Can not insert data";
 pub const MESSAGE_CAN_NOT_UPDATE_DATA: &str = "Can not update data";
@@ -15,15 +15,19 @@ pub const MESSAGE_INVALID_TOKEN: &str = "Invalid token, please login again";
 pub const MESSAGE_INTERNAL_SERVER_ERROR: &str = "Internal Server Error";
 
 
-pub const MESSAGE_TOKEN_MISSING: &str = "Token is missing";
+pub const MESSAGE_TOKEN_MISSING: &str = "Token is missing";*/
 
+
+pub const MESSAGE_OK: &str = "ok";
 /**
-cookie key
+登录token 例 auth:
 */
 pub const AUTHORIZATION: &str = "auth";
 
 
-pub const EMPTY: &str = "";
+/*pub const EMPTY: &str = "";
 
 
-pub const IGNORE_ROUTES: [&str; 3] = ["/api/ping", "/api/auth/signup", "/api/auth/login"];
+pub const IGNORE_ROUTES: [&str; 3] = ["/api/ping", "/api/auth/signup", "/api/auth/login"];*/
+
+//pub const CURRENT_USER:&str="当前用户";

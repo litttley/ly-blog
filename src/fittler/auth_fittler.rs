@@ -1,19 +1,16 @@
-use std::fs::read_to_string;
 use std::task::{Context, Poll};
 
-use actix_identity::{Identity, RequestIdentity};
+use actix_identity::{RequestIdentity};
 use actix_service::{Service, Transform};
-use actix_session::UserSession;
+//use actix_session::UserSession;
 use actix_web::{Error, http, HttpResponse};
-use actix_web::dev::{ResourcePath, ServiceRequest, ServiceResponse};
+use actix_web::dev::{/*ResourcePath, */ServiceRequest, ServiceResponse};
 use futures::future::{Either, ok, Ready};
-use log::{error, info, warn};
-use once_cell::sync::Lazy;
+use log::{/*error, */info/*, warn*/};
 
-use crate::config::alias::ConnectionPool;
 use crate::fittler::auth_global_variable::EXCLUDE_PATH;
 use crate::utils::claims;
-use crate::utils::constants;
+
 
 pub struct Authentication;
 
@@ -53,11 +50,9 @@ impl<S, B> Service for AuthenticationMiddleware<S>
     }
 
     fn call(&mut self, mut req: ServiceRequest) -> Self::Future {
+
         let url = req.uri().path();
         let mut is_pass = false;
-        /*     if url.contains("/static"){
-                 return Either::Left(self.service.call(req));
-             }*/
         for path in EXCLUDE_PATH.iter() {
             if path.ends_with("/**") {
                 if url.contains(&path.clone().replace("/**", "")) {
@@ -71,7 +66,7 @@ impl<S, B> Service for AuthenticationMiddleware<S>
                 }
             }
         }
-        info!("is_pass====>{:?}", is_pass);
+       info!("is_pass====>{:?}", is_pass);
         if is_pass {
             return Either::Left(self.service.call(req));
         }
@@ -97,7 +92,7 @@ impl<S, B> Service for AuthenticationMiddleware<S>
             }
         }
 
-        if (is_effective) {
+        if is_effective {
             info!("当前用户:{:?}", user_name);
             //   if let Some(pool) = req.app_data::<ConnectionPool>() {} 注去数据库确认用户是否存在,此逻辑暂不实现
             Either::Left(self.service.call(req))
