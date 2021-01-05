@@ -7,7 +7,7 @@ use chrono::{Local/*, NaiveDateTime*/};
 use log::{/*error, */info/*, warn*/};
 //use actix_identity::Identity;
 use serde_json::json;
-use sqlx::Done;
+use sqlx::{Done, Error};
 use uuid::Uuid;
 
 use crate::blog::entity::blog_page_entity::BlogListMsgs;
@@ -16,7 +16,7 @@ use crate::blog::resp::blog_resp::{BlogListResp, GetEditMarkDownResp, GetMarkDow
 use crate::config::alias::ConnectionPool;
 use crate::errors::custome_error::CustomeErrors;
 use crate::model::blog_item::{BlogItem, NewBlog};
-
+use crate::model::config::Config;
 //use futures::FutureExt;
 
 pub struct BlogHandler(pub ConnectionPool);
@@ -34,6 +34,8 @@ pub trait BlogHandlerTrait {
     async fn blog_edit_save(&self, form: BlogEidtReq) -> Result<String, CustomeErrors>;
 
     async fn blog_delete(&self, form: BlogDeleteReq) -> Result<String, CustomeErrors>;
+
+    async fn blog_visit(&self, form: Config) -> Result<String, CustomeErrors>;
 }
 
 
@@ -164,7 +166,7 @@ impl BlogHandlerTrait for BlogHandler {
 
             blogls = sqlx::query_as::<_, BlogListResp>(
                 r#"
-select id,blog_id,user_account,mark_down_content,html_content,title,blog_moudle,created_at from blog_item where  blog_moudle = ? ORDER BY created_at LIMIT 5 OFFSET ?
+select id,blog_id,user_account,mark_down_content,html_content,title,blog_moudle,created_at from blog_item where  blog_moudle = ? ORDER BY created_at DESC LIMIT 5 OFFSET ?
         "#
             ).bind(
                 &blog_moudle
@@ -248,5 +250,39 @@ select id as id ,mark_down_content as  content ,title as title, blog_moudle  fro
         } else {
             Err(CustomeErrors::CustomError(String::from("删除失败!")))
         }
+    }
+
+    async fn blog_visit(&self, form: Config) -> Result<String, CustomeErrors> {
+
+       info!("blog_visit......start");
+        let info = sqlx::query_as::<_, Config>(
+            r#"
+select * from config where url = ?
+        "#
+        ).bind(&form.url)
+
+            .fetch_one(&***self.0).await;
+
+info!("config:{:?}",info);
+
+        if let Ok(t) = info {
+            let new_times = t.visit_times + 1;
+            let sql = "UPDATE config SET visit_times = ? WHERE url = ?";
+            let result = sqlx::query(sql).bind(&new_times).bind(&form.url).execute(&***self.0).await;
+        } else {
+            sqlx::query!(
+            r"
+     INSERT INTO `config`( `url`, `visit_times`, `updated_at`) VALUES ( ?, ?, ?)#",
+         form.url,
+        form.visit_times,
+        form.updated_at
+
+        )
+                .execute(&***self.0)
+                .await;
+        }
+
+        info!("blog_visit......end");
+        Ok("".to_string())
     }
 }

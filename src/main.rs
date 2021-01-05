@@ -21,7 +21,7 @@ use std::{env, io};
 //use thiserror;
 use std::sync::Arc;
 //use actix_identity::Identity;
- use actix_identity::{CookieIdentityPolicy, IdentityService/*,RequestIdentity*/};
+use actix_identity::{CookieIdentityPolicy, IdentityService/*,RequestIdentity*/};
 //use chrono::Duration;
 
 use time::Duration;
@@ -42,7 +42,7 @@ use mysql_config::MysqlPools;
 use log4rs;
 
 use common::controller::common_controller;
-use fittler::auth_fittler;
+use fittler::{auth_fittler, visit_fittler};
 use utils::constants;
 
 #[actix_web::main]
@@ -69,6 +69,7 @@ async fn main() -> io::Result<()> {
             .wrap(middleware::Logger::default())
             //登录拦截器
             .wrap(auth_fittler::Authentication)
+            .wrap(visit_fittler::Views)
             .wrap(IdentityService::new(
                 CookieIdentityPolicy::new(secret.as_bytes())
                     .name(constants::AUTHORIZATION)
@@ -79,11 +80,10 @@ async fn main() -> io::Result<()> {
             ))
             //注册页面路由
             .configure(config::app::config_common_services)
-           //注册服务路由
+            //注册服务路由
             .configure(config::app::config_blog_services)
             // default
             .default_service(web::route().to(common_controller::page_404))
-
     })
         .bind("127.0.0.1:8080")?
         .run()
