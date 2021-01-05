@@ -11,13 +11,19 @@ use uuid::Uuid;
 
 use crate::auth::handler::auth_handler::{AuthHandler, IUser};
 use crate::blog::handler::blog_handler::{BlogHandler, BlogHandlerTrait};
-use crate::blog::req::blog_req::{BlogDeleteReq, BlogEidtReq, BlogListReq, GetBlogMkDownReq, Info};
+use crate::blog::req::blog_req::{BlogDeleteReq, BlogEidtReq, BlogListReq, GetBlogMkDownReq, Info, SendMailReq};
 use crate::config::alias::ConnectionPool;
 use crate::model::blog_item::BlogItem;
 use crate::model::user::{SigninUser, SignupUser};
 use crate::utils::claims::{/*Claims,*/ UserToken};
 use crate::utils::claims;
 use crate::utils::result_msg::ResultMsg;
+use crate::utils::mail::MailUtils;
+
+use lettre::smtp::authentication::{Credentials, Mechanism};
+use lettre::smtp::ConnectionReuseParameters;
+use lettre::{SmtpClient, Transport};
+use lettre_email::Email;
 
 //use sqlx::mysql::{MySqlPool};
 
@@ -157,7 +163,7 @@ pub async fn public_blog_list_content(id: Identity, blog_list_req: Json<BlogList
 
     match blog_handler.blog_page_list(data).await {
         Ok(res) => {
-           // info!("ok: {:?}", res);
+            // info!("ok: {:?}", res);
             ResultMsg::new().msg("ok").data(res)
         }
         Err(e) => {
@@ -177,7 +183,7 @@ pub async fn get_edit_mkdown((item, pool): (Json<GetBlogMkDownReq>, ConnectionPo
 
     match blog_handler.get_edit_mkdown(item.into_inner()).await {
         Ok(t) => {
-           // info!("ok: {:?}", t);
+            // info!("ok: {:?}", t);
             ResultMsg::new().msg("ok").data(t)
         }
 
@@ -226,7 +232,7 @@ pub async fn blog_edit_save((blog_eidt_req, pool): (Json<BlogEidtReq>, Connectio
 
     match blog_handler.blog_edit_save(data).await {
         Ok(r) => {
-          //  info!("ok: {:?}", r);
+            //  info!("ok: {:?}", r);
             ResultMsg::new().msg(r).data(())
         }
 
@@ -301,7 +307,22 @@ pub async fn save_file(mut payload: Multipart, web::Query(info): web::Query<Info
         }
     }
 
-    Ok(HttpResponse::Ok().json(json!({"success": 1,"message": "上传成功", "url":file_path})))
+    Ok(HttpResponse::Ok().json(json!({"success": 1,"message": "上传成功", "url": format!("/{}",file_path) })))
+}
+
+pub async fn send_mail(send_mail_req: Json<SendMailReq>) -> impl Responder {
+    let mail_utils = MailUtils::new( send_mail_req.mail_to_addr.clone(), send_mail_req.mail_content.clone(), send_mail_req.mail_title.clone());
+
+    match mail_utils.send_mail() {
+        Ok(t) => {
+            info!("ok: {:?}", t);
+            ResultMsg::new().msg(t).data(())
+        }
+        Err(e) => {
+            error!(" error: {:?}", e);
+            ResultMsg::new().code(400).msg(e.to_string())
+        }
+    }
 }
 
 

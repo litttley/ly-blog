@@ -18,6 +18,7 @@ pub static EXCLUDE_PATH: Lazy<Vec<&'static str>> = Lazy::new(|| {
     paths.push("/pblogdetails");
     paths.push("/signup");
     paths.push("/signin");
+    paths.push("/sendmail");
     paths.push("/");
 
     paths

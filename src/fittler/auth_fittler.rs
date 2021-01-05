@@ -49,7 +49,7 @@ impl<S, B> Service for AuthenticationMiddleware<S>
         self.service.poll_ready(cx)
     }
 
-    fn call(&mut self, mut req: ServiceRequest) -> Self::Future {
+    fn call(&mut self,  req: ServiceRequest) -> Self::Future {
 
         let url = req.uri().path();
         let mut is_pass = false;
