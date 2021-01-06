@@ -93,11 +93,11 @@ function ajaxData(page_int,blog_moudle,mark){
                     /*onclick="bloginfo( \''+blogArray[i].blogid+'\',\''+blogArray[i].title+'\')"*/
                     var tr_flag='<tr > '
                     tr_flag+=' <td class="topic"><i class="fa fa-star"></i> <a >'+blogArray[i].title+'</a> <span class="label label-success">NEW</span></td>';
-                    tr_flag+=' <td class="posts">3 <br><span class="note">更新次数</span></td>';
+                    tr_flag+=' <td class="posts">'+ blogArray[i].updated_times+' <br><span class="note">更新次数</span></td>';
                     tr_flag+='<td class="poster"><a href="#"><img class="profile" src="/static/assets/images/profiles/mycat.jpg" alt=""></a></td>';
-                    tr_flag+='<td class="views">1,326<br><span class="note">流览量</span></td>';
-                    var date = blogArray[i].created_at.split("T")[0];
-                    var time = blogArray[i].created_at.split("T")[1].split(".")[0];
+                    tr_flag+='<td class="views">'+blogArray[i].visit_times+'<br><span class="note">流览量</span></td>';
+                    var date = blogArray[i].updated_at.split("T")[0];
+                    var time = blogArray[i].updated_at.split("T")[1].split(".")[0];
                     tr_flag+='<td class="updated">最近 <a href="#">更新时间</a><br>'+date+" "+time+'</td>';
                     tr_flag+='<td class="edit">  <a onclick="bloginfo( \''+blogArray[i].blog_id+'\',\''+blogArray[i].title+'\')">查看</a>&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="blogEdit( \''+blogArray[i].blog_id+'\',\''+blogArray[i].title+'\')">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;' +
                         '<a onclick="blogDelte( \''+blogArray[i].blog_id+'\',\''+blogArray[i].title+'\')">删除</a></td>'

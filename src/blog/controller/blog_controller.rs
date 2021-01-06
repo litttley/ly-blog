@@ -89,7 +89,7 @@ pub async fn blog_signin(id: Identity, signin_user: Json<SigninUser>, pool: Conn
 
 //博客保存
 pub async fn blog_save(id: Identity, blog_item: Json<BlogItem>, pool: ConnectionPool) -> impl Responder {
-    let data = BlogItem {
+    let mut data = BlogItem {
         blogid: String::from(""),
         userid: blog_item.userid.clone(),
         content: blog_item.content.clone(),
@@ -119,6 +119,8 @@ pub async fn blog_save(id: Identity, blog_item: Json<BlogItem>, pool: Connection
     if login_user_name.is_empty() {
         return ResultMsg::new().code(400).msg("当前用户未登录,请重新登录!");
     }
+
+    data.userid = login_user_name;
 
 
     let blog_handler = BlogHandler(pool);
@@ -311,7 +313,7 @@ pub async fn save_file(mut payload: Multipart, web::Query(info): web::Query<Info
 }
 
 pub async fn send_mail(send_mail_req: Json<SendMailReq>) -> impl Responder {
-    let mail_utils = MailUtils::new( send_mail_req.mail_to_addr.clone(), send_mail_req.mail_content.clone(), send_mail_req.mail_title.clone());
+    let mail_utils = MailUtils::new(send_mail_req.mail_to_addr.clone(), send_mail_req.mail_content.clone(), send_mail_req.mail_title.clone());
 
     match mail_utils.send_mail() {
         Ok(t) => {

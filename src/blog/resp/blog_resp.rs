@@ -10,7 +10,9 @@ pub struct BlogListResp {
     pub html_content: String,
     pub title: String,
     pub blog_moudle: String,
-    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+    pub updated_times:i32,
+    pub visit_times:i32,
 }
 
 

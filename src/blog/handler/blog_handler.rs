@@ -50,15 +50,12 @@ impl BlogHandlerTrait for BlogHandler {
         info!("handle user_id {}", &user_id);
 
         if user_id == "" || content == "" || blog_moudle == "" {
-            /*return   Ok(Msgs {
-                status: 500,
-                message : "内容不能为空！！".to_string()
-            })*/
             return Err(CustomeErrors::CustomError(String::from("内容不能为空!")));
         }
 
-
-        let mut path = String::from("./static/");
+        let my_uuid = Uuid::new_v4();
+        let my_uuid = my_uuid.to_string().replace("-", "").to_uppercase();
+    /*    let mut path = String::from("./static/");
         path.push_str(&user_id);
 
         path.push_str("/");
@@ -102,21 +99,26 @@ impl BlogHandlerTrait for BlogHandler {
                 }
             }
             Err(_e) => json!({"faild":"文件创建失败，请联系管理员！！"})
-        };
+        };*/
 
 
-        if msg.as_object().unwrap().contains_key("success") && msg2.as_object().unwrap().contains_key("success") {
+       // if msg.as_object().unwrap().contains_key("success") && msg2.as_object().unwrap().contains_key("success") {
             let new_blog = NewBlog {
                 userid: &blog_item.userid,
                 blogid: &my_uuid,
                 content: &blog_item.content,
                 created_at: Local::now().naive_local(),
                 updated_at: Local::now().naive_local(),
+
                 title: &blog_item.title,
                 blog_moudle: &blog_item.blog_moudle,
-
                 content_html: &blog_item.content_html,
+                created_by: &blog_item.userid,
+                updated_by: &blog_item.userid,
+                updated_times: 1,
+                visit_times: 1,
                 is_display: "1",
+
             };
 
 
@@ -131,17 +133,17 @@ impl BlogHandlerTrait for BlogHandler {
             new_blog.blog_moudle,
             new_blog.created_at,
             new_blog.updated_at,
-            "",
-           "",
+            new_blog.created_by,
+            new_blog.updated_by,
             new_blog.is_display,
         )
                 .execute(&***self.0)
                 .await
                 .map(|d| d.rows_affected())?;
             Ok(String::from("保存成功!"))
-        } else {
+   /*     } else {
             return Err(CustomeErrors::CustomError(String::from("本地文件存储失败!")));
-        }
+        }*/
     }
 
     async fn blog_page_list(&self, form: BlogListReq) -> Result<BlogListMsgs, CustomeErrors> {
@@ -166,7 +168,7 @@ impl BlogHandlerTrait for BlogHandler {
 
             blogls = sqlx::query_as::<_, BlogListResp>(
                 r#"
-select id,blog_id,user_account,mark_down_content,html_content,title,blog_moudle,created_at from blog_item where  blog_moudle = ? ORDER BY created_at DESC LIMIT 5 OFFSET ?
+select id,blog_id,user_account,mark_down_content,html_content,title,blog_moudle,updated_at,updated_times,visit_times from blog_item where  blog_moudle = ? ORDER BY created_at DESC LIMIT 5 OFFSET ?
         "#
             ).bind(
                 &blog_moudle
@@ -191,6 +193,11 @@ select html_content as content from blog_item where blog_id = ?
         ).bind(&form.bid)
 
             .fetch_one(&***self.0).await;
+
+
+        let sql = "UPDATE blog_item SET visit_times=visit_times+1 WHERE blog_id = ?";
+        let _result = sqlx::query(sql).bind(&form.bid).execute(&***self.0).await;
+
         info!("11223{:?}", info);
         if let Ok(t) = info {
             Ok(t)
@@ -207,6 +214,7 @@ select id as id ,mark_down_content as  content ,title as title, blog_moudle  fro
         ).bind(&form.bid)
 
             .fetch_one(&***self.0).await;
+
         // info!("11223{:?}", info);
         if let Ok(t) = info {
             Ok(t)
@@ -230,7 +238,7 @@ select id as id ,mark_down_content as  content ,title as title, blog_moudle  fro
         }
 
 
-        let sql = "UPDATE blog_item SET mark_down_content = ?, html_content = ? WHERE id = ?";
+        let sql = "UPDATE blog_item SET mark_down_content = ?, html_content = ?,updated_times=updated_times+1 WHERE id = ?";
         let result = sqlx::query(sql).bind(blog_content).bind(blog_content_html).bind(pk_id).execute(&***self.0).await;
         info!("{:?}", result);
         if let Ok(_t) = result {
