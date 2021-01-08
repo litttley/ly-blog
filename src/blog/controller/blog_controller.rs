@@ -1,17 +1,15 @@
-//use json::JsonValue;
 use actix_identity::Identity;
 use actix_multipart::Multipart;
-use actix_web::{Error, /*get,*/ HttpRequest, HttpResponse, Responder, Result, web::{self, /*Data,*/ Json, Path}};
+use actix_web::{Error, HttpRequest, HttpResponse, Responder, Result, web::{self, /*Data,*/ Json, Path}};
 use async_std::prelude::*;
 use futures::TryStreamExt;
-//use actix_web::http::{StatusCode};
-use log::{error, info/*, warn*/};
+use log::{error, info};
 use serde_json::json;
 use uuid::Uuid;
 
 use crate::auth::handler::auth_handler::{AuthHandler, IUser};
 use crate::blog::handler::blog_handler::{BlogHandler, BlogHandlerTrait};
-use crate::blog::req::blog_req::{BlogDeleteReq, BlogEidtReq, BlogListReq, GetBlogMkDownReq, Info, SendMailReq};
+use crate::blog::req::blog_req::{BlogDeleteReq, BlogEidtReq, BlogListReq, GetBlogMkDownReq, GetBlogMkDownPathReq, Info, SendMailReq};
 use crate::config::alias::ConnectionPool;
 use crate::model::blog_item::BlogItem;
 use crate::model::user::{SigninUser, SignupUser};
@@ -20,14 +18,7 @@ use crate::utils::claims;
 use crate::utils::result_msg::ResultMsg;
 use crate::utils::mail::MailUtils;
 
-use lettre::smtp::authentication::{Credentials, Mechanism};
-use lettre::smtp::ConnectionReuseParameters;
-use lettre::{SmtpClient, Transport};
-use lettre_email::Email;
 
-//use sqlx::mysql::{MySqlPool};
-
-/*use serde_json::json;*/
 //注册
 pub async fn blog_signup(signup_user: Json<SignupUser>, pool: ConnectionPool) -> impl Responder {
     let msg = SignupUser {
@@ -196,9 +187,9 @@ pub async fn get_edit_mkdown((item, pool): (Json<GetBlogMkDownReq>, ConnectionPo
     }
 }
 
-pub async fn get_blog_mkdown((info, item, _req): (Path<(String)>, Json<GetBlogMkDownReq>, HttpRequest), pool: ConnectionPool) -> impl Responder {
-    let module_name = info.into_inner();
-    info!("模块名称module_name ====> {:?}", module_name);
+pub async fn get_blog_mkdown((info, item, _req): (Path<GetBlogMkDownPathReq>, Json<GetBlogMkDownReq>, HttpRequest), pool: ConnectionPool) -> impl Responder {
+    let path_req = info.into_inner();
+    info!("模块名称module_name ====> {:?}", path_req.name);
 
     if item.bid.is_empty() {
         return ResultMsg::new().code(400).msg("bid不能为空!");

@@ -1,13 +1,7 @@
-use std::fs::create_dir_all;
-use std::fs::File;
-use std::io::{BufWriter, Write};
-
 use anyhow::{/*Context,*/ Result};
 use chrono::{Local/*, NaiveDateTime*/};
 use log::{/*error, */info/*, warn*/};
-//use actix_identity::Identity;
-use serde_json::json;
-use sqlx::{Done, Error};
+use sqlx::{Done};
 use uuid::Uuid;
 
 use crate::blog::entity::blog_page_entity::BlogListMsgs;
@@ -46,7 +40,7 @@ impl BlogHandlerTrait for BlogHandler {
         let user_id = blog_item.userid.clone();
         let content = blog_item.content.clone();
         let blog_moudle = blog_item.blog_moudle.clone();
-        let content_html = blog_item.content_html.clone();
+        let _content_html = blog_item.content_html.clone();
         info!("handle user_id {}", &user_id);
 
         if user_id == "" || content == "" || blog_moudle == "" {
@@ -55,74 +49,26 @@ impl BlogHandlerTrait for BlogHandler {
 
         let my_uuid = Uuid::new_v4();
         let my_uuid = my_uuid.to_string().replace("-", "").to_uppercase();
-    /*    let mut path = String::from("./static/");
-        path.push_str(&user_id);
+        let new_blog = NewBlog {
+            userid: &blog_item.userid,
+            blogid: &my_uuid,
+            content: &blog_item.content,
+            created_at: Local::now().naive_local(),
+            updated_at: Local::now().naive_local(),
 
-        path.push_str("/");
-        path.push_str(&blog_moudle);
-        let mut path2 = path.clone();
-        let my_uuid = Uuid::new_v4();
-        let my_uuid = my_uuid.to_string().replace("-", "").to_uppercase();
+            title: &blog_item.title,
+            blog_moudle: &blog_item.blog_moudle,
+            content_html: &blog_item.content_html,
+            created_by: &blog_item.userid,
+            updated_by: &blog_item.userid,
+            updated_times: 1,
+            visit_times: 1,
+            is_display: "1",
 
-        let msg = match create_dir_all(&path) {
-            Ok(_t) => {
-                path.push_str("/");
-                path.push_str(&my_uuid);
-                path.push_str(".md");
-                info!("path file{}", path);
-                match File::create(path) {
-                    Ok(t) => {
-                        let mut f = BufWriter::new(t);
-                        f.write_all(&content.as_bytes()).expect("写入文件失败");
-                        json!({"success":"文件创建成功!"})
-                    }
-                    Err(_e) => json!({"faild":"文件创建失败，请联系管ca理员！！"})
-                }
-            }
-            Err(_e) => json!({"faild":"文件创建失败，请联系管理员！！"})
         };
 
 
-        let msg2 = match create_dir_all(&path2) {
-            Ok(_t) => {
-                path2.push_str("/");
-                path2.push_str(&my_uuid);
-                path2.push_str(".html");
-                info!("path file{}", path2);
-                match File::create(path2) {
-                    Ok(t) => {
-                        let mut f = BufWriter::new(t);
-                        f.write_all(&content_html.as_bytes()).expect("写入文件失败");
-                        json!({"success" :"文件成功！"})
-                    }
-                    Err(_e) => json!({"faild" :"文件创建失败，请联系管ca理员！！"})
-                }
-            }
-            Err(_e) => json!({"faild":"文件创建失败，请联系管理员！！"})
-        };*/
-
-
-       // if msg.as_object().unwrap().contains_key("success") && msg2.as_object().unwrap().contains_key("success") {
-            let new_blog = NewBlog {
-                userid: &blog_item.userid,
-                blogid: &my_uuid,
-                content: &blog_item.content,
-                created_at: Local::now().naive_local(),
-                updated_at: Local::now().naive_local(),
-
-                title: &blog_item.title,
-                blog_moudle: &blog_item.blog_moudle,
-                content_html: &blog_item.content_html,
-                created_by: &blog_item.userid,
-                updated_by: &blog_item.userid,
-                updated_times: 1,
-                visit_times: 1,
-                is_display: "1",
-
-            };
-
-
-            sqlx::query!(
+        sqlx::query!(
             r"
      INSERT INTO `blog_item`( `blog_id`, `user_account`, `mark_down_content`, `html_content`, `title`, `blog_moudle`, `created_at`, `updated_at`, `created_by`, `updated_by`, `is_display`) VALUES ( ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?)#",
            new_blog.blogid,
@@ -137,13 +83,13 @@ impl BlogHandlerTrait for BlogHandler {
             new_blog.updated_by,
             new_blog.is_display,
         )
-                .execute(&***self.0)
-                .await
-                .map(|d| d.rows_affected())?;
-            Ok(String::from("保存成功!"))
-   /*     } else {
-            return Err(CustomeErrors::CustomError(String::from("本地文件存储失败!")));
-        }*/
+            .execute(&***self.0)
+            .await
+            .map(|d| d.rows_affected())?;
+        Ok(String::from("保存成功!"))
+        /*     } else {
+                 return Err(CustomeErrors::CustomError(String::from("本地文件存储失败!")));
+             }*/
     }
 
     async fn blog_page_list(&self, form: BlogListReq) -> Result<BlogListMsgs, CustomeErrors> {
@@ -261,8 +207,7 @@ select id as id ,mark_down_content as  content ,title as title, blog_moudle  fro
     }
 
     async fn blog_visit(&self, form: Config) -> Result<String, CustomeErrors> {
-
-       info!("blog_visit......start");
+        info!("blog_visit......start");
         let info = sqlx::query_as::<_, Config>(
             r#"
 select * from config where url = ?
@@ -271,14 +216,14 @@ select * from config where url = ?
 
             .fetch_one(&***self.0).await;
 
-info!("config:{:?}",info);
+        info!("config:{:?}", info);
 
         if let Ok(t) = info {
             let new_times = t.visit_times + 1;
             let sql = "UPDATE config SET visit_times = ? WHERE url = ?";
-            let result = sqlx::query(sql).bind(&new_times).bind(&form.url).execute(&***self.0).await;
+            let _result = sqlx::query(sql).bind(&new_times).bind(&form.url).execute(&***self.0).await;
         } else {
-            sqlx::query!(
+            let _result = sqlx::query!(
             r"
      INSERT INTO `config`( `url`, `visit_times`, `updated_at`) VALUES ( ?, ?, ?)#",
          form.url,

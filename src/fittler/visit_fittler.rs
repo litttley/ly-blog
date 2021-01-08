@@ -1,16 +1,14 @@
 use std::task::{Context, Poll};
 use actix_service::{Service, Transform};
 use actix_web::dev::{ServiceRequest, ServiceResponse};
-use actix_web::{web, Error, http, HttpResponse};
-use futures::future::{Either, ok, Ready, IntoStream};
+use actix_web::{Error};
+use futures::future::{Either, ok, Ready};
 use crate::fittler::visit_global_variable::VISIT_PATH;
-use std::ops::Deref;
 use crate::blog::handler::blog_handler::{BlogHandler, BlogHandlerTrait};
 use crate::config::alias::ConnectionPool;
 use crate::model::config::Config;
-use chrono::{Local/*, NaiveDateTime*/};
-use log::{/*error, */info/*, warn*/};
-use futures::{StreamExt, FutureExt};
+use chrono::{Local};
+use log::{info};
 
 
 pub struct Views;
@@ -51,18 +49,16 @@ impl<S, B> Service for ViewsMiddleware<S>
         self.service.poll_ready(cx)
     }
 
-    fn call(&mut self, mut req: ServiceRequest) -> Self::Future {
+    fn call(&mut self, req: ServiceRequest) -> Self::Future {
         info!("ViewsMiddleware.........");
 
         let url = req.uri().path();
         let pool = req.app_data::<ConnectionPool>().expect("过滤器Views中获取数据库连接池失败！");
-        let mut vec = VISIT_PATH.clone();
+        let vec = VISIT_PATH.clone();
 
 
         futures::executor::block_on(async {
-            use futures::future::FutureExt;
-            use futures::stream::{self, StreamExt};
-            use futures::future;
+            use futures::stream::{StreamExt};
 
             let fetches = futures::stream::iter(
                 vec.into_iter().filter(|visit_path| url.ends_with(visit_path)).map(|visit_path| {
@@ -76,7 +72,7 @@ impl<S, B> Service for ViewsMiddleware<S>
                             updated_at: Local::now().naive_local(),
                         };
 
-                        blog_handler.blog_visit(config).await;
+                        let _result = blog_handler.blog_visit(config).await;
                         ()
                     }
                 })

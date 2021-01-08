@@ -1,11 +1,9 @@
-use once_cell::sync::{Lazy/*, OnceCell*/};
+use once_cell::sync::{Lazy};
 
 
 pub static EXCLUDE_PATH: Lazy<Vec<&'static str>> = Lazy::new(|| {
     let mut paths = Vec::new();
-    /**
-    放行路径
-    */
+    //放行路径
     paths.push("/static/**");
     paths.push("/favicon");
     paths.push("/index");

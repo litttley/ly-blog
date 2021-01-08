@@ -10,6 +10,11 @@ pub struct GetBlogMkDownReq {
 }
 
 #[derive(Deserialize, Serialize, Debug)]
+pub struct GetBlogMkDownPathReq {
+    pub name: String,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
 pub struct BlogEidtReq {
     pub id: i32,
     pub blogid: String,

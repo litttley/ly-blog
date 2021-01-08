@@ -18,7 +18,7 @@ pub const MESSAGE_INTERNAL_SERVER_ERROR: &str = "Internal Server Error";
 pub const MESSAGE_TOKEN_MISSING: &str = "Token is missing";*/
 
 
-pub const MESSAGE_OK: &str = "ok";
+//pub const MESSAGE_OK: &str = "ok";
 /**
 登录token 例 auth:
 */

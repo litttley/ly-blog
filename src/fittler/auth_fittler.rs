@@ -2,11 +2,10 @@ use std::task::{Context, Poll};
 
 use actix_identity::{RequestIdentity};
 use actix_service::{Service, Transform};
-//use actix_session::UserSession;
 use actix_web::{Error, http, HttpResponse};
-use actix_web::dev::{/*ResourcePath, */ServiceRequest, ServiceResponse};
+use actix_web::dev::{ServiceRequest, ServiceResponse};
 use futures::future::{Either, ok, Ready};
-use log::{/*error, */info/*, warn*/};
+use log::{info};
 
 use crate::fittler::auth_global_variable::EXCLUDE_PATH;
 use crate::utils::claims;
@@ -49,8 +48,7 @@ impl<S, B> Service for AuthenticationMiddleware<S>
         self.service.poll_ready(cx)
     }
 
-    fn call(&mut self,  req: ServiceRequest) -> Self::Future {
-
+    fn call(&mut self, req: ServiceRequest) -> Self::Future {
         let url = req.uri().path();
         let mut is_pass = false;
         for path in EXCLUDE_PATH.iter() {
@@ -66,7 +64,7 @@ impl<S, B> Service for AuthenticationMiddleware<S>
                 }
             }
         }
-       info!("is_pass====>{:?}", is_pass);
+        info!("is_pass====>{:?}", is_pass);
         if is_pass {
             return Either::Left(self.service.call(req));
         }
@@ -74,7 +72,7 @@ impl<S, B> Service for AuthenticationMiddleware<S>
         let mut user_name = String::from("");
         let identity = req.get_identity();
         info!("{:?}", req.uri());
-        let mut is_effective = false;
+        let is_effective;
 
         match identity {
             Some(token) => {

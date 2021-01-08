@@ -1,29 +1,12 @@
-use actix_files as fs;
-use actix_session::{CookieSession, Session};
-use actix_utils::mpsc;
-use actix_web::http::{header, Method, StatusCode};
-use actix_web::{
-    error, get, guard, middleware, web, App, Error, HttpRequest, HttpResponse,
-    HttpServer, Result,
-};
-
-/*#[macro_use]
-extern crate sqlx;*/
-
+use actix_session::{CookieSession};
+use actix_web::{middleware, web, App, HttpServer, };
 #[macro_use]
 extern crate async_trait;
-
 #[macro_use]
 extern crate serde;
-
 use std::{env, io};
-//use sqlx::mysql::{MySqlPool};
-//use thiserror;
 use std::sync::Arc;
-//use actix_identity::Identity;
-use actix_identity::{CookieIdentityPolicy, IdentityService/*,RequestIdentity*/};
-//use chrono::Duration;
-
+use actix_identity::{CookieIdentityPolicy, IdentityService};
 use time::Duration;
 
 
@@ -38,7 +21,6 @@ mod fittler;
 
 use config::mysql_config;
 use mysql_config::MysqlPools;
-//use log::{error, info, warn};
 use log4rs;
 
 use common::controller::common_controller;

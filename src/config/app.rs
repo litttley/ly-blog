@@ -1,7 +1,7 @@
-use std::{env, io};
+use std::{io};
 
 use actix_files as fs;
-use actix_web::{error, guard, HttpRequest, HttpResponse, web};
+use actix_web::{error, HttpRequest, HttpResponse, web};
 use actix_web::http::{header, Method, StatusCode};
 use log::info;
 
