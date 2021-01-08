@@ -31,6 +31,10 @@ pub struct NewBlog<'a> {
     pub blog_moudle: &'a str,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
+    pub created_by:&'a str,
+    pub updated_by:&'a str,
+    pub updated_times:i32,
+    pub visit_times:i32,
     pub is_display: &'a str,
 }
 

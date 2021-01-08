@@ -1,7 +1,7 @@
-use std::{env, io};
+use std::{io};
 
 use actix_files as fs;
-use actix_web::{error, guard, HttpRequest, HttpResponse, web};
+use actix_web::{error, HttpRequest, HttpResponse, web};
 use actix_web::http::{header, Method, StatusCode};
 use log::info;
 
@@ -53,6 +53,8 @@ pub fn config_blog_services(cfg: &mut web::ServiceConfig) {
         .service(web::resource("/blogdelete").route(web::post().to(blog_controller::blog_delete)))
         //图片上传
         .service(web::resource("/uploadimg").route(web::post().to(blog_controller::save_file)))
+        //发送邮件
+        .service(web::resource("/sendmail").route(web::post().to(blog_controller::send_mail)))
         .service(
             web::resource("/test").to(|req: HttpRequest| match *req.method() {
                 Method::GET => HttpResponse::Ok(),
