@@ -1,6 +1,6 @@
 use chrono::NaiveDateTime;
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug,Validate)]
 pub struct BlogItem {
     pub blogid: String,
     pub userid: String,
