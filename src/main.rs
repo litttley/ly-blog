@@ -9,7 +9,8 @@ use std::sync::Arc;
 use actix_identity::{CookieIdentityPolicy, IdentityService};
 use time::Duration;
 
-
+#[macro_use]
+extern crate validator;
 mod config;
 mod errors;
 mod auth;
@@ -26,6 +27,7 @@ use log4rs;
 use common::controller::common_controller;
 use fittler::{auth_fittler, visit_fittler};
 use utils::constants;
+use crate::fittler::param_check_fittler;
 
 #[actix_web::main]
 async fn main() -> io::Result<()> {
@@ -52,6 +54,7 @@ async fn main() -> io::Result<()> {
             //登录拦截器
             .wrap(auth_fittler::Authentication)
             .wrap(visit_fittler::Views)
+            //.wrap(param_check_fittler::ParamCheck)
             .wrap(IdentityService::new(
                 CookieIdentityPolicy::new(secret.as_bytes())
                     .name(constants::AUTHORIZATION)

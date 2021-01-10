@@ -1,8 +1,13 @@
-#[derive(Deserialize, Serialize, Debug)]
+use serde::Deserialize;
+use validator::{Validate, ValidationError, ValidationErrors};
+#[derive(Deserialize, Serialize, Debug,Validate)]
 pub struct BlogListReq {
     pub page: usize,
+    #[validate(custom(function = "crate::utils::validator_fn::valid_custom_fn", message = "参数不能为空!"))]
+  //  #[serde(rename = "blogMoudle")]
     pub blog_moudle: String,
 }
+
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct GetBlogMkDownReq {

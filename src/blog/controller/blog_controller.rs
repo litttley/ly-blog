@@ -14,9 +14,10 @@ use crate::config::alias::ConnectionPool;
 use crate::model::blog_item::BlogItem;
 use crate::model::user::{SigninUser, SignupUser};
 use crate::utils::claims::{/*Claims,*/ UserToken};
-use crate::utils::claims;
+use crate::utils::{claims, validator_fn};
 use crate::utils::result_msg::ResultMsg;
 use crate::utils::mail::MailUtils;
+use validator::{Validate, ValidationError};
 
 
 //注册
@@ -130,7 +131,7 @@ pub async fn blog_save(id: Identity, blog_item: Json<BlogItem>, pool: Connection
 
 //博客列表
 pub async fn public_blog_list_content(id: Identity, blog_list_req: Json<BlogListReq>, pool: ConnectionPool) -> impl Responder {
-    if let Some(token) = id.identity() {
+/*    if let Some(token) = id.identity() {
         info!("token{}", &token);
 
         match claims::decode_token(&token) {
@@ -144,14 +145,17 @@ pub async fn public_blog_list_content(id: Identity, blog_list_req: Json<BlogList
         }
     } else {
         info!("error{:?}", id.identity());
-    }
-
+    }*/
 
     let data = BlogListReq {
         page: blog_list_req.page.clone(),
         blog_moudle: blog_list_req.blog_moudle.clone(),
     };
-
+    /*参数校验*/
+    let check_result = validator_fn::check(&data);
+    if let Err(e) = check_result {
+        return ResultMsg::new().code(400).msg(e);
+    }
     let blog_handler = BlogHandler(pool);
 
     match blog_handler.blog_page_list(data).await {
