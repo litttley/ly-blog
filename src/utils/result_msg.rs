@@ -31,6 +31,15 @@ impl<T: Serialize> ResultMsg<T> {
         self.code = code;
         self
     }
+    pub fn ok(mut self) -> Self {
+        self.code = 200;
+        self
+    }
+
+    pub fn error(mut self) -> Self {
+        self.code = -1;
+        self
+    }
 
     pub fn msg<S: Into<Cow<'static, str>>>(mut self, msg: S) -> Self {
         self.msg = Some(msg.into());

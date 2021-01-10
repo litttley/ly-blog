@@ -64,7 +64,7 @@ impl<S, B> Service for ViewsMiddleware<S>
                 vec.into_iter().filter(|visit_path| url.ends_with(visit_path)).map(|visit_path| {
                     async move {
                         let blog_handler = BlogHandler(pool.clone());
-                        info!("访问的url:{}", visit_path);
+                        info!("当前访问url: {}", visit_path);
                         let config = Config {
                             id: 0,
                             url: visit_path.to_string(),
@@ -77,7 +77,6 @@ impl<S, B> Service for ViewsMiddleware<S>
                     }
                 })
             ).buffer_unordered(2).collect::<Vec<()>>();
-            info!("Waiting...");
             fetches.await;
         });
 
