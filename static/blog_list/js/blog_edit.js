@@ -135,7 +135,7 @@ $("#submit").click(function(){
         "onclick": null,
         "showDuration": "300",
         "hideDuration": "1000",
-        "timeOut": "5000",
+        "timeOut": "2000",
         "extendedTimeOut": "1000",
         "showEasing": "swing",
         "hideEasing": "linear",
@@ -197,12 +197,12 @@ $("#submit").click(function(){
                 var href_url="/"+module_value+'/blogList';
                 setTimeout(function () {
                     location.href=href_url;
-                }, 5000);
+                }, 2000);
             }else{
                 toastr.error("网络异常，请重新注册！");
                 setTimeout(function(){
                     location.reload();
-                }, 5000);
+                }, 2000);
             }
         }
     });

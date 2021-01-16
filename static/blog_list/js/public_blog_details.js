@@ -10,7 +10,7 @@ $(document).ready(function() {
         "onclick": null,
         "showDuration": "300",
         "hideDuration": "1000",
-        "timeOut": "5000",
+        "timeOut": "2000",
         "extendedTimeOut": "1000",
         "showEasing": "swing",
         "hideEasing": "linear",
@@ -22,7 +22,7 @@ $(document).ready(function() {
     var bname  =  localStorage.getItem('bname');
     if (bid_value =="" || bid_value ==null || bid_value ==undefined || bname ==""|| bname==null || bname ==undefined){
         toastr['warning']("session已过期即将跳转至首页。。。");
-        setTimeout("javascript:location.href='/index'", 5000);
+        setTimeout("javascript:location.href='/index'", 2000);
     };
     var  blog_moudle_name =get_moudle_name();
     var url = "/"+blog_moudle_name+"/getmkdown";

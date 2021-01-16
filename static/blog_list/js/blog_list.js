@@ -1,5 +1,6 @@
 $(function () {
     init_page();
+
 });
 
 //初始下方分页现示
@@ -82,6 +83,7 @@ function ajaxData(pageInt, blogMoudle, mark) {
             if (data.code == 200) {
                 var blogArray = data.data.blog_list;
                 var page_num = data.data.count;
+                var page_int = parseInt(page_num/5)+1　 ;
                 $("#blogContent").empty();
                 for (var i in blogArray) {
                     /*  <tr>
@@ -112,8 +114,29 @@ function ajaxData(pageInt, blogMoudle, mark) {
                 toastr.error(data.msg);
             }
         }, error: function (xhr, textStatus, errorThrown) {
-            if (xhr.status == 401) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": /*"toast-top-full-width"*/"toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "2000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+            if (xhr.readyState==4 && xhr.status==200) {
                 toastr.error("没有访问权限,请重新登录!");
+                var href_url = xhr.getResponseHeader("location");
+                setTimeout(function () {
+                    location.href=href_url;
+                }, 2000);
             } else {
                 toastr.error("网络异常，请重新登录！");
             }
@@ -202,7 +225,7 @@ function blogDelte(id, name) {
         "onclick": null,
         "showDuration": "300",
         "hideDuration": "1000",
-        "timeOut": "5000",
+        "timeOut": "2000",
         "extendedTimeOut": "1000",
         "showEasing": "swing",
         "hideEasing": "linear",
@@ -228,16 +251,16 @@ function blogDelte(id, name) {
                 toastr.success("成功删除,即将刷新页面");
                 setTimeout(function () {
                     init_page();
-                }, 5000);
+                }, 2000);
             } else if (data.message == "unauth") {
                 // toastr.success("未登录,稍后即将跳转登录页面");
                 //setTimeout(function () {
                 location.href = "/unauth";
-                //}, 5000);
+                //}, 2000);
             } else {
                 setTimeout(function () {
                     toastr.error("请刷新页面重试");
-                }, 5000);
+                }, 2000);
 
             }
 

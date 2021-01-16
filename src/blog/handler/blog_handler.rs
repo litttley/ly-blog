@@ -114,7 +114,7 @@ impl BlogHandlerTrait for BlogHandler {
 
             blogls = sqlx::query_as::<_, BlogListResp>(
                 r#"
-select id,blog_id,user_account,mark_down_content,html_content,title,blog_moudle,updated_at,updated_times,visit_times from blog_item where  blog_moudle = ? ORDER BY created_at DESC LIMIT 5 OFFSET ?
+select id,blog_id,user_account,mark_down_content,html_content,title,blog_moudle,updated_at,updated_times,visit_times from blog_item where is_display=1 and  blog_moudle = ? ORDER BY visit_times DESC, created_at DESC LIMIT 5 OFFSET ?
         "#
             ).bind(
                 &blog_moudle
@@ -195,7 +195,8 @@ select id as id ,mark_down_content as  content ,title as title, blog_moudle  fro
     }
 
     async fn blog_delete(&self, form: BlogDeleteReq) -> Result<String, CustomeErrors> {
-        let sql = "DELETE FROM blog_item WHERE blog_id = ?";
+        //let sql = "DELETE FROM blog_item WHERE blog_id = ?";
+        let sql = "UPDATE blog_item SET is_display = 0 WHERE blog_id = ?";
         let result = sqlx::query(sql).bind(form.bid).execute(&***self.0).await;
         info!("{:?}", result);
 

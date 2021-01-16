@@ -97,6 +97,14 @@ pub async fn test_md(_req: HttpRequest) -> Result<HttpResponse> {
         .body(include_str!("../../../static/editor.md-master/test.md")))
 }
 
+// 未认证页面
+#[get("/unauth")]
+pub async fn unauth(_req: HttpRequest) -> Result<HttpResponse> {
+    // response
+    Ok(HttpResponse::build(StatusCode::OK)
+        .content_type("text/html; charset=utf-8")
+        .body(include_str!("../../../static/error_page/page_unlogon.html")))
+}
 
 pub async fn public_blog_details(_id: Identity, _req: HttpRequest, _path: Path<(String, )>) -> Result<HttpResponse> {
     // response
@@ -148,6 +156,7 @@ pub async fn blog_edit(id: Identity, _req: HttpRequest) -> Result<HttpResponse> 
             .content_type("text/html; charset=utf-8")
             .body(include_str!("../../../static/blog_list/blog_edit.html")))
     }
+
 }
 
 
