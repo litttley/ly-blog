@@ -23,6 +23,7 @@ pub fn config_common_services(cfg: &mut web::ServiceConfig) {
         .service(common_controller::blog_new)
         //博客编辑器默认加载文件
         .service(common_controller::test_md)
+        .service(common_controller::unauth)
         //带路径参数
         .service(web::resource(r"/{module}/blogList").route(web::get().to(common_controller::blog_list_page)))
         //博客编辑页
@@ -42,7 +43,7 @@ pub fn config_blog_services(cfg: &mut web::ServiceConfig) {
         //新建博客
         .service(web::resource("/blogsave").route(web::post().to(blog_controller::blog_save)))
         //博客列表
-        .service(web::resource("/pblogListContent").route(web::post().to(blog_controller::public_blog_list_content)))
+        .service(web::resource("/bloglistcontent").route(web::post().to(blog_controller::public_blog_list_content)))
         //博客查看页面
         .service(web::resource("/{name}/getmkdown").route(web::post().to(blog_controller::get_blog_mkdown)))
         //博客内容加载

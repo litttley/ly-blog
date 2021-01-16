@@ -1,6 +1,6 @@
-$(document).ready(function() {
-    $("#submit_register").click(function(){
-        $("#submit_register").attr("disabled",true);
+$(document).ready(function () {
+    $("#submit_register").click(function () {
+        $("#submit_register").attr("disabled", true);
         $("#submit_register").text("提交中..");
 
         toastr.options = {
@@ -24,26 +24,25 @@ $(document).ready(function() {
 
         var username = $("#login-username").val();
         var password = $("#login-password").val();
-        var  jsondata = JSON.stringify({
-            "username":username,
-            "password":password,
+        var jsondata = JSON.stringify({
+            "username": username,
+            "password": password,
         });
         $.ajax({
             url: "/signin",
-            type:'POST',
+            type: 'POST',
             dataType: "json",
             contentType: "application/json;charset=utf-8",
-            data:jsondata ,
-            success: function (message) {
-                //alert(message);
-                if(message.code ==200){
+            data: jsondata,
+            success: function (data) {
+                if (data.code == 200) {
                     toastr.success("登录成功，即将跳转页面！");
                     var allcookies = document.cookie;
                     console.log(allcookies);
-                 setTimeout("javascript:location.href='/index'", 5000);
-                }else{
-                    toastr.error("网络异常，请重新登录！");
-                    setTimeout(function(){
+                    setTimeout("javascript:location.href='/index'", 5000);
+                } else {
+                    toastr.error(data.msg);
+                    setTimeout(function () {
                         location.reload();
                     }, 5000);
                 }

@@ -97,8 +97,10 @@ impl<S, B> Service for AuthenticationMiddleware<S>
         } else {
             info!("没有访问权限,重定向/login");
             Either::Right(ok(req.into_response(
+                /*HttpResponse::Unauthorized().finish()
+                    .into_body(),*/
                 HttpResponse::Found()
-                    .header(http::header::LOCATION, "/login")
+                    .header(http::header::LOCATION, "/unauth")
                     .finish()
                     .into_body(),
             )))

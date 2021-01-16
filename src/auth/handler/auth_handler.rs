@@ -1,9 +1,9 @@
-use anyhow::{ Result};
+use anyhow::{Result};
 
 
 use crate::config::alias::ConnectionPool;
 use crate::errors::custome_error::CustomeErrors;
-use crate::model::user::{SignupUser, User};
+use crate::model::user::{SignupUser, User, SigninUser};
 use sqlx::Done;
 //use actix_identity::Identity;
 
@@ -14,7 +14,7 @@ pub struct AuthHandler(pub ConnectionPool);
 pub trait IUser {
     async fn user_add(&self, form: SignupUser) -> Result<String, CustomeErrors>;
 
-    async fn user_query(&self, name: &str) -> Result<User, CustomeErrors>;
+    async fn user_query(&self, form: SigninUser) -> Result<User, CustomeErrors>;
 }
 
 
@@ -22,7 +22,6 @@ pub trait IUser {
 #[async_trait]
 impl IUser for AuthHandler {
     async fn user_add(&self, form: SignupUser) -> Result<String, CustomeErrors> {
-
         let users: Vec<User> = sqlx::query_as!(
         User,
         r#"
@@ -40,9 +39,8 @@ impl IUser for AuthHandler {
 
         sqlx::query!(
             r#"
-      INSERT INTO `users`(`id`, `user_name`, `pass_word`, `email`)
-      VALUES (?, ?, ?, ?)"#,
-           1,
+      INSERT INTO `users`(`user_name`, `pass_word`, `email`)
+      VALUES (?, ?, ?)"#,
             form.username,
            form.password,
             form.email
@@ -54,20 +52,21 @@ impl IUser for AuthHandler {
         Ok(String::from("用户创建成功"))
     }
 
-    async fn user_query(&self, name: &str) -> Result<User, CustomeErrors> {
-      let user  =   sqlx::query_as!(
+    async fn user_query(&self, form: SigninUser) -> Result<User, CustomeErrors> {
+        let user = sqlx::query_as!(
             User,
             r#"
         SELECT id, user_name, pass_word, email, created_at, updated_at,created_by,updated_by
         FROM users
-        where user_name = ?
+        where user_name = ? and pass_word =?
                 "#,
-            name
+                form.username,
+                form.password,
+
         )
             .fetch_one(&***self.0)
             .await?;
 
         Ok(user)
-
     }
 }

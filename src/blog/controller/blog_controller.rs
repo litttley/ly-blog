@@ -22,22 +22,28 @@ use validator::{Validate, ValidationError};
 
 //注册
 pub async fn blog_signup(signup_user: Json<SignupUser>, pool: ConnectionPool) -> impl Responder {
-    let msg = SignupUser {
+    let data = SignupUser {
         username: signup_user.username.clone(),
         email: signup_user.email.clone(),
         password: signup_user.password.clone(),
         confirm_password: signup_user.confirm_password.clone(),
     };
 
+    /*参数校验*/
+    let check_result = validator_fn::check(&data);
+    if let Err(e) = check_result {
+        return ResultMsg::new().error().msg(e);
+    }
+
     let auth_handler = AuthHandler(pool);
-    match auth_handler.user_add(msg).await {
+    match auth_handler.user_add(data).await {
         Ok(res) => {
             info!("auth_handler.user_add ok  响应数据====》 {}", res);
             ResultMsg::new().msg("ok").data(res)
         }
         Err(e) => {
             error!(" auth_handler.user_add error: {:?}", e);
-            ResultMsg::new().code(400).msg(e.to_string())
+            ResultMsg::new().error().msg(e.to_string())
         }
     }
 }
@@ -50,7 +56,7 @@ pub async fn blog_signin(id: Identity, signin_user: Json<SigninUser>, pool: Conn
 
     };
     let auth_handler = AuthHandler(pool);
-    match auth_handler.user_query(&form.username).await {
+    match auth_handler.user_query(form).await {
         Ok(user) => {
             info!("当前登录用户====> {:?}", user);
             let token = UserToken {
@@ -67,13 +73,13 @@ pub async fn blog_signin(id: Identity, signin_user: Json<SigninUser>, pool: Conn
                 }
                 Err(e) => {
                     error!("创建token失败====> {:?}", e);
-                    ResultMsg::new().code(400).msg(e.to_string())
+                    ResultMsg::new().error().msg(e.to_string())
                 }
             }
         }
         Err(e) => {
             error!("用户查询失败!====> {:?}", e);
-            ResultMsg::new().code(400).msg(e.to_string())
+            ResultMsg::new().error().msg("用户名或密码错误!")
         }
     }
 }
@@ -89,6 +95,12 @@ pub async fn blog_save(id: Identity, blog_item: Json<BlogItem>, pool: Connection
         title: blog_item.title.clone(),
         blog_moudle: blog_item.blog_moudle.clone(),
     };
+
+    /*参数校验*/
+    let check_result = validator_fn::check(&data);
+    if let Err(e) = check_result {
+        return ResultMsg::new().error().msg(e);
+    }
 
     let mut login_user_name = String::from("");
     if let Some(token) = id.identity() {
@@ -131,22 +143,6 @@ pub async fn blog_save(id: Identity, blog_item: Json<BlogItem>, pool: Connection
 
 //博客列表
 pub async fn public_blog_list_content(id: Identity, blog_list_req: Json<BlogListReq>, pool: ConnectionPool) -> impl Responder {
-/*    if let Some(token) = id.identity() {
-        info!("token{}", &token);
-
-        match claims::decode_token(&token) {
-            Ok(token_data) => {
-                info!("当:{:?}", token_data);
-            }
-
-            Err(e) => {
-                info!("Unauthorized:{:?}", e);
-            }
-        }
-    } else {
-        info!("error{:?}", id.identity());
-    }*/
-
     let data = BlogListReq {
         page: blog_list_req.page.clone(),
         blog_moudle: blog_list_req.blog_moudle.clone(),
@@ -154,7 +150,7 @@ pub async fn public_blog_list_content(id: Identity, blog_list_req: Json<BlogList
     /*参数校验*/
     let check_result = validator_fn::check(&data);
     if let Err(e) = check_result {
-        return ResultMsg::new().code(400).msg(e);
+        return ResultMsg::new().error().msg(e);
     }
     let blog_handler = BlogHandler(pool);
 
