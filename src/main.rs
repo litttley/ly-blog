@@ -68,7 +68,7 @@ async fn main() -> io::Result<()> {
             //注册服务路由
             .configure(config::app::config_blog_services)
             // default
-            .default_service(web::route().to(common_controller::page_404))
+           // .default_service(web::route().to(common_controller::page_404))
     })
         .bind("127.0.0.1:8080")?
         .run()
