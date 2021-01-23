@@ -82,8 +82,7 @@ function ajaxData(pageInt, blogMoudle, mark) {
         success: function (data) {
             if (data.code == 200) {
                 var blogArray = data.data.blog_list;
-                var page_num = data.data.count;
-                var page_int = parseInt(page_num/5)+1　 ;
+                var pageNum = data.data.count;
                 $("#blogContent").empty();
                 for (var i in blogArray) {
                     /*  <tr>
@@ -109,7 +108,7 @@ function ajaxData(pageInt, blogMoudle, mark) {
                     $("#blogContent").append(tr_flag);
                 }
 
-                init_page_html(page_int, page_num, mark);
+                init_page_html(pageInt, pageNum, mark);
             } else {
                 toastr.error(data.msg);
             }
@@ -146,9 +145,9 @@ function ajaxData(pageInt, blogMoudle, mark) {
 
 function init_page() {
     var blog_moudle = get_moudle_name();
-    var page_int = 1;//page_int：页数
+    var pageInt = 1;//page_int：页数
     if (blog_moudle != "") {
-        ajaxData(page_int, blog_moudle, "");
+        ajaxData(pageInt, blog_moudle, "");
     }
 }
 
@@ -179,10 +178,10 @@ $(".pagenum").on("click", function () {
     $(this).css("border", "none");
     var page = $(this).attr("flag");
 
-    var page_int = parseInt(page);
+    var pageInt = parseInt(page);
     var blog_moudle = get_moudle_name();
     if (blog_moudle != "") {
-        ajaxData(page_int, blog_moudle, "");
+        ajaxData(pageInt, blog_moudle, "");
     }
 });
 
@@ -202,13 +201,13 @@ $(".prev_next_page").on("click", function () {
             if (flag_num < 5) {
                 ajaxData(1, blog_moudle, mark);
             } else {
-                var page_int = (parseInt(flag_num / 5) - 1) * 5 + 1
-                ajaxData(page_int, blog_moudle, mark);
+                var pageInt = (parseInt(flag_num / 5) - 1) * 5 + 1
+                ajaxData(pageInt, blog_moudle, mark);
 
             }
         } else {//向后翻页
-            var page_int = (parseInt(flag_num / 5) + 1) * 5 + 1
-            ajaxData(page_int, blog_moudle, mark);
+            var pageInt = (parseInt(flag_num / 5) + 1) * 5 + 1
+            ajaxData(pageInt, blog_moudle, mark);
         }
 
     }

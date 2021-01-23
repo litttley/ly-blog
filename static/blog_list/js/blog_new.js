@@ -73,7 +73,7 @@ $("#submit").click(function(){
                     location.href=href_url;
                 }, 2000);
             }else{
-                toastr.error("网络异常，请重新注册！");
+                toastr.error(message.msg);
                 setTimeout(function(){
                     location.reload();
                 }, 2000);
