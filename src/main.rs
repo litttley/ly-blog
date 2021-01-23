@@ -56,7 +56,7 @@ async fn main() -> io::Result<()> {
             .wrap(visit_fittler::Views)
             //.wrap(param_check_fittler::ParamCheck)
             .wrap(IdentityService::new(
-                CookieIdentityPolicy::new(secret.as_bytes())
+                 CookieIdentityPolicy::new(secret.as_bytes())
                     .name(constants::AUTHORIZATION)
                     .path("/")
                     .domain(domain.as_str())
