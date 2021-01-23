@@ -39,7 +39,7 @@ $(document).ready(function () {
                     toastr.success("登录成功，即将跳转页面！");
                     var allcookies = document.cookie;
                     console.log(allcookies);
-                    setTimeout("javascript:location.href='/index'", 5000);
+                    setTimeout("javascript:location.href='/index'", 2000);
                 } else {
                     toastr.error(data.msg);
                     setTimeout(function () {

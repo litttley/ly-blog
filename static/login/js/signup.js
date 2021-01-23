@@ -53,7 +53,7 @@ $(document).ready(function () {
             success: function (data) {
                 if (data.code === 200) {
                     toastr.success("注册成功，即将跳转至登录页面！");
-                    setTimeout("javascript:location.href='/login'", 5000);
+                    setTimeout("javascript:location.href='/login'", 2000);
                 } else {
                     toastr.error(data.msg);
                     setTimeout(function () {
