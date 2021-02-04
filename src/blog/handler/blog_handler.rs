@@ -105,7 +105,7 @@ impl BlogHandlerTrait for BlogHandler {
         if page >= 0 && !blog_moudle.is_empty() {
             println!("select");
 
-            let row: (i64, ) = sqlx::query_as("select count(*) from blog_item where blog_moudle = ?").bind(&blog_moudle)
+            let row: (i64, ) = sqlx::query_as("select count(*) from blog_item where blog_moudle = ? and is_display=1").bind(&blog_moudle)
 
                 .fetch_one(&***self.0).await?;
 
